@@ -3,15 +3,17 @@ export class Calculator {
   private currentInput: string = '';
   private operator: string | null = null;
   private firstOperand: number | null = null;
+  private buttons: NodeListOf<HTMLButtonElement>;
 
-  constructor() {
-    this.display = document.querySelector('.display input') as HTMLInputElement;
+
+  constructor(display: HTMLInputElement, buttons: NodeListOf<HTMLButtonElement>) {
+    this.display = display;
+    this.buttons = buttons;
     this.addEventListeners();
   }
 
   addEventListeners() {
-    const buttons = document.querySelectorAll('.buttons button') as NodeListOf<HTMLButtonElement>;
-    buttons.forEach(button => {
+    this.buttons.forEach(button => {
       button.addEventListener('click', () => this.handleButtonClick(button));
     });
   }
@@ -89,7 +91,3 @@ export class Calculator {
     this.display.value = '0';
   }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  new Calculator();
-});
