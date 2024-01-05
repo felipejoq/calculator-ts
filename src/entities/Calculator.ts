@@ -5,7 +5,6 @@ export class Calculator {
   private firstOperand: number | null = null;
   private buttons: NodeListOf<HTMLButtonElement>;
 
-
   constructor(display: HTMLInputElement, buttons: NodeListOf<HTMLButtonElement>) {
     this.display = display;
     this.buttons = buttons;
@@ -25,14 +24,14 @@ export class Calculator {
       switch (buttonValue) {
         case '+':
         case '-':
-        case '*':
+        case 'x':
         case '/':
           this.handleOperatorClick(buttonValue);
           break;
         case '=':
           this.handleEqualClick();
           break;
-        case 'C': // Agrega la lógica para el botón de Clear
+        case 'C':
           this.handleClearClick();
           break;
         default:
@@ -44,13 +43,17 @@ export class Calculator {
 
   handleOperatorClick(operator: string) {
     if (this.currentInput !== '') {
+      this.calculateResult();
       this.operator = operator;
-      this.firstOperand = parseFloat(this.currentInput);
       this.currentInput = '';
     }
   }
 
   handleEqualClick() {
+    this.calculateResult();
+  }
+
+  calculateResult() {
     if (this.operator && this.firstOperand !== null && this.currentInput !== '') {
       const secondOperand = parseFloat(this.currentInput);
       let result: number;
@@ -75,13 +78,11 @@ export class Calculator {
       this.display.value = result.toString();
       this.currentInput = result.toString();
       this.operator = null;
-      this.firstOperand = null;
+      this.firstOperand = result;
+    } else if (this.currentInput !== '') {
+      this.firstOperand = parseFloat(this.currentInput);
+      this.currentInput = '';
     }
-  }
-
-  handleNumberClick(number: string) {
-    this.currentInput += number;
-    this.display.value = this.currentInput;
   }
 
   handleClearClick() {
@@ -89,5 +90,10 @@ export class Calculator {
     this.operator = null;
     this.firstOperand = null;
     this.display.value = '0';
+  }
+
+  handleNumberClick(number: string) {
+    this.currentInput += number;
+    this.display.value = this.currentInput;
   }
 }
